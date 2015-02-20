@@ -80,30 +80,30 @@ bool can_move (grid g, dir d) {
     switch (d) {
 
     case LEFT:
-        for (int i=1; i<GRID_SIDE; ++i)  
-            for (int j=0; j<GRID_SIDE; ++j) 
-                if ( (g->grid[i-1][j] == 0) || (g->grid[i][j] == g->grid[i-1][j]) ) // si case suivante vide ou fusion possible
+        for (int colonne=1; colonne<GRID_SIDE; ++colonne)  
+            for (int ligne=0; ligne<GRID_SIDE; ++ligne) 
+                if ( (g->grid[colonne-1][ligne] == 0) || (g->grid[colonne][ligne] == g->grid[colonne-1][ligne]) ) // si case suivante vide ou fusion possible
                     return true;
         break;
 
     case RIGHT:
-        for (int i=0; i<GRID_SIDE-1; ++i)
-            for (int j=0; j<GRID_SIDE; ++j)
-                if ( (g->grid[i+1][j] == 0) || (g->grid[i][j] == g->grid[i+1][j]) )
+        for (int colonne=0; colonne<GRID_SIDE-1; ++colonne)
+            for (int ligne=0; ligne<GRID_SIDE; ++ligne)
+                if ( (g->grid[colonne+1][ligne] == 0) || (g->grid[colonne][ligne] == g->grid[colonne+1][ligne]) )
                     return true;
         break;
 
     case UP:
-        for (int i=0; i<GRID_SIDE; ++i)
-            for (int j=1; j<GRID_SIDE; ++j)
-                if ( (g->grid[i][j-1] == 0) || (g->grid[i][j-1] == g->grid[i][j]) )
+        for (int colonne=0; colonne<GRID_SIDE; ++colonne)
+            for (int ligne=1; ligne<GRID_SIDE; ++ligne)
+                if ( (g->grid[colonne][ligne-1] == 0) || (g->grid[colonne][ligne-1] == g->grid[colonne][ligne]) )
                     return true;
         break;
 
     case DOWN:
-        for (int i=0; i<GRID_SIDE; ++i)
-            for (int j=0; j<GRID_SIDE-1; ++j)
-                if ( (g->grid[i][j+1] == 0) || (g->grid[i][j+1] == g->grid[i][j]) )
+        for (int colonne=0; colonne<GRID_SIDE; ++colonne)
+            for (int ligne=0; ligne<GRID_SIDE-1; ++ligne)
+                if ( (g->grid[colonne][ligne+1] == 0) || (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) )
                     return true;
         break;
     }
@@ -115,7 +115,7 @@ bool can_move (grid g, dir d) {
 bool game_over(grid g) {
 
     if ( !can_move(g,UP) && !can_move(g,DOWN) &&
-		!can_move(g,LEFT) && !can_move(g,RIGHT))
+	 !can_move(g,LEFT) && !can_move(g,RIGHT))
         return true;
 
     else
@@ -126,11 +126,11 @@ bool game_over(grid g) {
 void do_move (grid g, dir d) {
 
     if (can_move(g,d)) {
-        // dans tout le switch, on utilisera i pour parcourir les colonnes et j pour les lignes
+        
         switch (d) {
 
         case LEFT:
-            for (int ligne = 0; ligne<GRID_SIDE; ++ligne)	// on parcourt de gauche à droite
+	  for (int ligne = 0; ligne<GRID_SIDE; ++ligne) {	// on parcourt de gauche à droite
                 for (int colonne = 1; colonne<GRID_SIDE; ++colonne) {   // et de haut en bas
                     if (g->grid[colonne][ligne] != 0) { // si la case n'est pas vide
                         if (g->grid[colonne-1][ligne] == 0) {  // si la case de gauche est vide, on décale la case actuelle
@@ -145,6 +145,7 @@ void do_move (grid g, dir d) {
                         }
                     }
                 }
+	  }
 
             break;
 
@@ -168,8 +169,8 @@ void do_move (grid g, dir d) {
             break;
 
         case DOWN:
-            for (int colonne=0; colonne<GRID_SIDE; ++colonne) // on parcourt de gauche à droite
-                for (int ligne = GRID_SIDE-2; ligne>=0; --ligne) // de bas en haut
+	  for (int colonne=0; colonne<GRID_SIDE; ++colonne) { // on parcourt de gauche à droite
+	    for (int ligne = GRID_SIDE-2; ligne>=0; --ligne)  {// de bas en haut
                     if (g->grid[colonne][ligne] != 0 && ligne < 3) {		
                         if (g->grid[colonne][ligne+1] == 0) {		
                             g->grid[colonne][ligne+1] = g->grid[colonne][ligne];
@@ -182,15 +183,28 @@ void do_move (grid g, dir d) {
                             g->score += g->grid[colonne][ligne+1];
                         }
                     }
+	    }
+	  }
             break;
-            /* ATTENTION utilisé ligne et colonne (pas i et j)
-                  case UP:
-                      for (int i=0; i<GRID_SIDE; ++i)
-                          for (int j=0; j<GRID_SIDE-1; ++j)
-                              if ( (g->grid[i][j+1] == 0) || (g->grid[i][j+1] == g->grid[i][j]) ) // si case suivante vide ou fusion possible
-                                  return true;
-                  break;
-            	}*/
+	    
+	case UP:
+	  for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
+	    for (int ligne=0; ligne<GRID_SIDE-1; ++ligne) {
+	      if (g->grif[colonne][ligne] != 0) {
+		if (g->grid[colonne][ligne-1] == 0) {
+		  g->grid[colonne][ligne-1] = g->grid[colonne][ligne];
+		  g->grid[colonne][ŀigne]=0;
+		  ligne-=2;
+		}
+		else if (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) {
+		  g->grid[colonne][ligne] = 0;
+		  g->grid[colonne][ligne] *= 2;
+		  g->score += g->grid[colonne][ligne-1];
+		}
+	      }
+	    }
+	  }
+	  break;
         }
     }
 }
