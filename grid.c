@@ -190,10 +190,10 @@ void do_move (grid g, dir d) {
 	case UP:
 	  for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
 	    for (int ligne=0; ligne<GRID_SIDE-1; ++ligne) {
-	      if (g->grif[colonne][ligne] != 0) {
+	      if (g->grid[colonne][ligne] != 0) {
 		if (g->grid[colonne][ligne-1] == 0) {
 		  g->grid[colonne][ligne-1] = g->grid[colonne][ligne];
-		  g->grid[colonne][ŀigne]=0;
+		  g->grid[colonne][ligne]=0;
 		  ligne-=2;
 		}
 		else if (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) {
