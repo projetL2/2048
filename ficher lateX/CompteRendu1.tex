@@ -1,0 +1,73 @@
+\documentclass{report}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{setspace}
+\usepackage{listings} 
+\usepackage{hyperref}
+
+\begin{document}
+\lstset{language=C}
+
+\title{Compte-rendu N°1 de projet 2048}
+\author{Guillaume ALMYRE 
+\and
+Gaëtan CHAMBRES
+\and
+Chrystelle PETUREAU}
+\date{17/02/2015}
+
+\maketitle
+
+\section*{Travail effectué la semaine 6 :}
+Nous avons constitué le groupe de projet, créé un framapad pour mieux se communiquer les informations.
+Chacun a effectué une première lecture de grid.h afin de réfléchir aux fonctions et structures à implémenter.
+
+\section*{Objectif pour la séance du 10/02 :}
+\begin{itemize}
+
+\item Comparer nos pistes de travail
+\item Se répartir les fonctions au vue de nos compétences et envies respectives
+\item Définir la structure grid
+\item Premiers pas sur Subversion pour pouvoir travailler à distance hors des séances de TP
+	
+\end{itemize}
+
+\section*{Travail effectué la semaine 7 :}
+
+L'implémentation la plus intéressante pour la structure grid est, de notre point de vue, un tableau dynamique de la forme tile**.
+\medskip
+\begin{lstlisting}[frame=single]
+struct grid_s {
+	unsigned long int score;
+	tile** grid;
+};
+\end{lstlisting}
+\medskip
+Nous avons souhaité découper le projet en plusieurs fichiers :
+\medskip
+\begin{itemize}
+
+\item Le fichier grid.h donné dans le sujet
+\item	Le .c avec les différentes fonctions principalement développées par Gaëtan et Guillaume
+\item Le fichier test-grid.h contenant le main, principalement développé par Chrystelle
+\item Un Makefile
+\item Un dossier d'impressions d'écran afin de préparer la soutenance et le rapport
+
+\end{itemize}
+
+Grâce à ce découpage, il y a presque deux équipes au sein du projet. Ainsi, si une équipe arrive à comprendre et utiliser le code de l'autre sans y avoir participé, cela voudra dire que le code est lisible et bien commenté.\\ \\La grille ainsi que le score s'affichent correctement. Certains déplacements ont été implémentés.
+Il semble que les fonctions aient un comportement normal mais de nombreux tests sont encore à faire.\\ \\Nous avons choisi de privilégier Git par rapport à Subversion car l'outil nous a semblé plus intuitif.
+Un dépôt sur github a été mis en place et est utilisé pour mettre en ligne les dernières versions des fichiers.\\ \\
+L'adresse du dépôt : \url{https://github.com/projetL2/2048.git} \\Les identifiants sont :
+\begin{description}
+\item [username : ] projetL2
+\item [password : ] IN4001ggc  (pout Guillaume, Gaëtan, Chrystelle)
+\end{description}
+
+\section*{Objectifs de la séance du 17/02}
+Tester les fonctions delete\_grid, copy\_grid, game\_over, add\_tile.
+Finir les fonctions can\_move, play.
+
+\end{document}

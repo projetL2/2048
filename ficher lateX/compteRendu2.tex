@@ -1,0 +1,59 @@
+\documentclass{report}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{setspace}
+\usepackage{listings} 
+\usepackage{hyperref}
+
+\begin{document}
+\lstset{language=C}
+
+\title{Compte-rendu N°1 de projet 2048}
+\author{Guillaume ALMYRE 
+\and
+Gaëtan CHAMBRES
+\and
+Chrystelle PETUREAU}
+\date{09/03/2015}
+
+\maketitle
+
+\section*{Information sur le travail en groupe:}
+L'adresse du dépôt : \url{https://github.com/projetL2/2048.git} \\Les identifiants sont :
+\begin{description}
+\item [username : ] projetL2
+\item [password : ] IN4001ggc  (pout Guillaume, Gaëtan, Chrystelle)
+\end{description}
+
+\section*{Etat des fonctions sur les quelles on travail}
+\begin{description}
+\item [new-grid :] fonctionne parfaitement
+\item [delete-grid :] faire un test pour les fuites de mémoire?
+\item [copy-grid :] à tester
+\item [grid-score :] fonctionne parfaitement
+\item [get-tile :] à mettre à jour
+\item [set-tile :] fonctionne parfaitement
+\item [can-move :] à optimiser
+\item [game-over :] à tester
+\item [do-move :] tester le mouvement up, à optimiser
+\item [add-tile :] fonctionne
+\item [play :]
+\item [afficher:] fonction parfaitement
+
+\end{description}
+
+
+\section*{Objectif pour la séance du 10/03 :}
+\begin{itemize}
+
+\item trouver un moyen de récupérer les commandes de l'utilisateur pour déplacer la grille en fonction pour mettre à jour la fonction play.
+\item oppitmiser can-move et do-move
+\item mettre dans les cases les puissance de 2 et non le nombre directement
+\item mettre à jour le fichier test. 
+	
+\end{itemize}
+
+
+\end{document}
