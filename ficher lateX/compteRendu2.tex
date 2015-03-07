@@ -20,38 +20,41 @@ Chrystelle PETUREAU}
 
 \maketitle
 
-\section*{Information sur le travail en groupe:}
+\section*{Informations sur le travail en groupe:}
 L'adresse du dépôt : \url{https://github.com/projetL2/2048.git} \\Les identifiants sont :
 \begin{description}
 \item [username : ] projetL2
-\item [password : ] IN4001ggc  (pout Guillaume, Gaëtan, Chrystelle)
+\item [password : ] IN4001ggc  (pour Guillaume, Gaëtan, Chrystelle)
 \end{description}
 
-\section*{Etat des fonctions sur les quelles on travail}
+\section*{Etat des fonctions:}
+ \\ Nous n'avons pas fait un résumé étapes par étapes car la phase de tests est finalement beaucoup plus longue que nous l'aurions imaginée. Au fur et à mesure des différents tests, on corrige le code pour qu'il soit opérationnel, clair et optimisé. Voici donc l'état des fonctions à ce jour.\\
+
 \begin{description}
 \item [new-grid :] fonctionne parfaitement
-\item [delete-grid :] faire un test pour les fuites de mémoire?
-\item [copy-grid :] à tester
+\item [afficher:] fonctionne parfaitement
 \item [grid-score :] fonctionne parfaitement
-\item [get-tile :] à mettre à jour
 \item [set-tile :] fonctionne parfaitement
-\item [can-move :] à optimiser
-\item [game-over :] à tester
-\item [do-move :] tester le mouvement up, à optimiser
-\item [add-tile :] fonctionne
-\item [play :]
-\item [afficher:] fonction parfaitement
+\item [delete-grid :] faire un test pour  vérifier les fuites de mémoire
+\item [copy-grid :] à tester (pour être sur d'avoir testé l'intégralité des fonctions).
+\item [game-over :] à tester (pour être sur d'avoir testé l'intégralité des fonctions)
+\item [get-tile :] il faut qu'on trouve un moyen de changer le return -1. De plus, on pense que peut être elle "lit" les données à l'envers X pour les ligne et Y pour les colonnes.
+\item [can-move :] on a testé les déplacements qui sont tous correct maintenant. On utilise les accesseurs pour un code plus propre.
+\item [do-move :] on doit tester le mouvement UP. Il semble que can-move lui transmettait une erreur. on va vérifier tous ça mardi 10 mars.
+\item [add-tile :] on doit l'optimiser avec par exemple une liste de case vide.
+\item [play :] on doit d'abords récupérer les commandes de l'utilisateur pour pouvoir la tester.
 
 \end{description}
 
 
-\section*{Objectif pour la séance du 10/03 :}
+\section*{Objectifs pour la séance du 10/03 :}
 \begin{itemize}
 
-\item trouver un moyen de récupérer les commandes de l'utilisateur pour déplacer la grille en fonction pour mettre à jour la fonction play.
-\item oppitmiser can-move et do-move
-\item mettre dans les cases les puissance de 2 et non le nombre directement
-\item mettre à jour le fichier test. 
+\item trouver un moyen de récupérer les commandes de l'utilisateur. Puis les utiliser pour déplacer les tiles de la grille. Enfin, mettre à jour la fonction play avec ces commandes là.\\
+\item optimiser le code avec une liste de cases vides.\\
+\item mettre dans les cases les puissance de 2 et non le nombre directement.\\
+\item mettre à jour le fichier test.\\
+\item essayer de comprendre pourquoi get-tile a besoin des cordonnées "à l'envers" pour fonctionner correctement.
 	
 \end{itemize}
 
