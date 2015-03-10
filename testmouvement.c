@@ -34,12 +34,12 @@ int main (void) {
   add_tile(g);
   afficher(g);
   if(can_move(g,RIGHT)){
-    //do_move(g,LEFT);
-    //add_tile(g);
+    do_move(g,RIGHT);
+    add_tile(g);
     printf("\n le mouvement est valide \n \n");
    
   }
-  //afficher(g);
+  afficher(g);
 
   return EXIT_SUCCESS;
 }
