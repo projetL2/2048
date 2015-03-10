@@ -46,7 +46,7 @@ void copy_grid (grid src, grid dst) {
 
     for (int i=0; i<GRID_SIDE; ++i)
         for (int j=0; j<GRID_SIDE; ++j)
-	  set_tile(dst,i,j,get_tile(src,i,j)); //On initialise la tuile de dst avec la valeur de celle de src 
+            dst->grid[i][j] = src->grid[i][j];
 
 }
 
@@ -57,18 +57,18 @@ unsigned long int grid_score (grid g) {
 }
 
 //Accesseur qui renvoie une tile en fonction des coordonnées en paramètres
-tile get_tile (grid g, int colonne, int ligne) {
+tile get_tile (grid g, int x, int y) {
 
-    if ((colonne>=0 && colonne<GRID_SIDE) && (ligne>=0 && ligne<GRID_SIDE))
-        return g->grid[colonne][ligne];
+    if ((x>=0 && x<=GRID_SIDE) && (y>=0 && y<=GRID_SIDE))
+        return g->grid[x][y];
     else
         return -1; // solution temporaire pour avoir toujours un return
 }
 
 //Accesseur qui instancie la valeur d'une tile en fonction des coordonnées et de la valeur en paramètres
-void set_tile (grid g, int colonne, int ligne, tile t) {
+void set_tile (grid g, int x, int y, tile t) {
 
-    g->grid[colonne][ligne] = t;
+    g->grid[x][y] = t;
 }
 
 //Fonction booléene qui renvoie true si le joueur peut effectuer un movement dans une direction
@@ -79,35 +79,31 @@ bool can_move (grid g, dir d) {
     //si oui, on renvoie true
     switch (d) {
 
-      case LEFT:
-      for (int colonne=1; colonne<GRID_SIDE; ++colonne)
-		for (int ligne=0; ligne<GRID_SIDE; ++ligne)
-      	  if ( get_tile(g,colonne,ligne) != 0) //si case pleine,
-      	    if( (get_tile(g,colonne-1,ligne) == 0) || (get_tile(g,colonne-1,ligne) == get_tile(g,colonne,ligne)) ) // alors on regarde si case suivante vide ou fusion possible
-      	      return true;
-      break;
+    case LEFT:
+        for (int colonne=1; colonne<GRID_SIDE; ++colonne)  
+            for (int ligne=0; ligne<GRID_SIDE; ++ligne) 
+                if ( (g->grid[colonne-1][ligne] == 0) || (g->grid[colonne][ligne] == g->grid[colonne-1][ligne]) ) // si case suivante vide ou fusion possible
+                    return true;
+        break;
 
     case RIGHT:
         for (int colonne=0; colonne<GRID_SIDE-1; ++colonne)
             for (int ligne=0; ligne<GRID_SIDE; ++ligne)
-	      if( get_tile(g,colonne,ligne) != 0)
-                if ( (get_tile(g,colonne+1,ligne) == 0) || (get_tile(g,colonne+1,ligne) == get_tile(g,colonne,ligne)))
+                if ( (g->grid[colonne+1][ligne] == 0) || (g->grid[colonne][ligne] == g->grid[colonne+1][ligne]) )
                     return true;
         break;
 
     case UP:
         for (int colonne=0; colonne<GRID_SIDE; ++colonne)
             for (int ligne=1; ligne<GRID_SIDE; ++ligne)
-	      if( get_tile(g,colonne,ligne) != 0)
-                if ( (get_tile(g,colonne,ligne-1) == 0) || (get_tile(g,colonne,ligne-1) == get_tile(g,colonne,ligne)) )
+                if ( (g->grid[colonne][ligne-1] == 0) || (g->grid[colonne][ligne-1] == g->grid[colonne][ligne]) )
                     return true;
         break;
 
     case DOWN:
         for (int colonne=0; colonne<GRID_SIDE; ++colonne)
             for (int ligne=0; ligne<GRID_SIDE-1; ++ligne)
-	      if( get_tile(g,colonne,ligne) != 0)
-                if ( (get_tile(g,colonne,ligne+1) == 0) || (get_tile(g,colonne,ligne+1) == get_tile(g,colonne,ligne)) )
+                if ( (g->grid[colonne][ligne+1] == 0) || (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) )
                     return true;
         break;
     }
@@ -128,24 +124,26 @@ bool game_over(grid g) {
 
 //Fonction qui déplace les tiles de la grid si le mouvement est possible
 void do_move (grid g, dir d) {
+
+    if (can_move(g,d)) {
         
         switch (d) {
 
         case LEFT:
-	  for (int colonne = 0; colonne<GRID_SIDE; ++colonne) {	// on parcourt de gauche à droite
-                for (int ligne = 1; ligne<GRID_SIDE; ++ligne) {   // et de haut en bas
-		  if (get_tile(g,colonne,ligne) != 0) { // si la case n'est pas vide
-		    if (get_tile(g,colonne-1,ligne) == 0) {  // si la case de gauche est vide, on décale la case actuelle
-		      set_tile(g,colonne-1,ligne,get_tile(g,colonne,ligne));
-		      set_tile(g,colonne,ligne,0);
+	  for (int ligne = 0; ligne<GRID_SIDE; ++ligne) {	// on parcourt de gauche à droite
+                for (int colonne = 1; colonne<GRID_SIDE; ++colonne) {   // et de haut en bas
+                    if (g->grid[colonne][ligne] != 0) { // si la case n'est pas vide
+                        if (g->grid[colonne-1][ligne] == 0) {  // si la case de gauche est vide, on décale la case actuelle
+                            g->grid[colonne-1][ligne] = g->grid[colonne][ligne];
+                            g->grid[colonne][ligne] = 0;
                             colonne-=2; // on décrémente i au cas où il y ait à déplacer la tile plusieurs fois
                         }
-		    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne-1,ligne)) { // s'il doit y avoir une fusion
-			set_tile(g,colonne,ligne,0);
-			set_tile(g,colonne-1,ligne,(get_tile(g,colonne-1,ligne)*2));				// on vide la case actuelle et on double la valeur de celle qu'elle a heurté
-			g->score += get_tile(g,colonne-1,ligne);		// on actualise le score
-                        } 
-					}
+                        else if (g->grid[colonne][ligne] == g->grid[colonne-1][ligne]) { // s'il doit y avoir une fusion
+                            g->grid[colonne][ligne] = 0;
+                            g->grid[colonne-1][ligne] *= 2;				// on vide la case actuelle et on double la valeur de celle qu'elle a heurté
+                            g->score += g->grid[colonne-1][ligne];		// on actualise le score
+                        }
+                    }
                 }
 	  }
 
@@ -154,23 +152,23 @@ void do_move (grid g, dir d) {
         case RIGHT:
             for (int ligne=0; ligne<GRID_SIDE; ++ligne) {// on parcourt de droite à gauche
                 for (int colonne = GRID_SIDE-2; colonne>=0; --colonne) { // et haut en bas
-		  if (get_tile(g,colonne,ligne) != 0 && colonne < 3) { 
-		    if (get_tile(g,colonne+1,ligne) == 0) {  
-		      set_tile(g,colonne+1,ligne,get_tile(g,colonne,ligne));
-		      set_tile(g,colonne,ligne,0);
+                    if (g->grid[colonne][ligne] != 0 && colonne < 3) { 
+                        if (g->grid[colonne+1][ligne] == 0) {  
+                            g->grid[colonne+1][ligne] = g->grid[colonne][ligne];
+                            g->grid[colonne][ligne] = 0;
                             colonne+=2; 
                         }
-		    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne+1,ligne)) { 
-			set_tile(g,colonne,ligne,0);
-			set_tile(g,colonne-1,ligne,(get_tile(g,colonne+1,ligne)*2));
-                        g->score += get_tile(g,colonne+1,ligne);		
+                        else if (g->grid[colonne][ligne] == g->grid[colonne+1][ligne]) { 
+                            g->grid[colonne][ligne] = 0;
+                            g->grid[colonne+1][ligne] *= 2;			
+                            g->score += g->grid[colonne+1][ligne];		
                         }
-                    
+                    }
                 }
             }
             break;
 
-	    case DOWN: //RE ECRIRE EN UTILISANT LES ACCESSEURS
+        case DOWN:
 	  for (int colonne=0; colonne<GRID_SIDE; ++colonne) { // on parcourt de gauche à droite
 	    for (int ligne = GRID_SIDE-2; ligne>=0; --ligne)  {// de bas en haut
                     if (g->grid[colonne][ligne] != 0 && ligne < 3) {		
@@ -189,7 +187,7 @@ void do_move (grid g, dir d) {
 	  }
             break;
 	    
-	    case UP: //RE ECRIRE EN UTILISANT LES ACCESSEURS
+	case UP:
 	  for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
 	    for (int ligne=0; ligne<GRID_SIDE-1; ++ligne) {
 	      if (g->grid[colonne][ligne] != 0) {
@@ -208,7 +206,7 @@ void do_move (grid g, dir d) {
 	  }
 	  break;
         }
-	}
+    }
 }
 // fonction qui ajoute une tile de fonction aléatoire dans une case vide de la grid
 void add_tile (grid g) {
