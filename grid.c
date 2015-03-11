@@ -2,6 +2,7 @@
 #include "grid.h"
 #include <stdlib.h>
 #include <assert.h>
+#include <stdio.h>
 
 
 // La structure de la grille, un pointeur de pointeur qui nous donnera la matrice
@@ -231,9 +232,11 @@ void add_tile (grid g) {
 
 // fonction qui doit récuperer les instruction du joueur
 void play (grid g, dir d) {
-
-    if(can_move(g,d)) { // si on peut jouer
-        do_move(g,d);  // on joue: on effectue le deplacement
-        add_tile(g);    // on ajoute une tile
-    }
+	if (game_over(g))
+		printf("vous avez perdu\n");
+    	/*else (can_move(g,d)){  // si on peut jouer
+        	do_move(g,d);  // on joue: on effectue le deplacement
+        	add_tile(g);    // on ajoute une tile
+	}*/
+    		
 }

@@ -34,8 +34,8 @@ int main (void) {
 	
 	//test de l'ajout de façon aléatoire (présant pour pour les autres tests)
 	afficher(g);
-	add_tile(g);
-	afficher(g);
+	//add_tile(g);
+	//afficher(g);
 
 	//test de copy_grid
 	/*printf("on essaye de copier la grille \n");
@@ -80,12 +80,40 @@ int main (void) {
 	//test sur les acceptations (ou non) de mouvement de can_move et les mouvement réellement effectués
 	//add_tile rempli une case de façon aléatoire, on demande un mouvement en particulier
 	// à nous visuellement de verifié si can_move devait l'accepeter ou non
-	if(can_move(g,RIGHT)){ // tester tour à tour avec RIGHT,DOWN, UP, LEFT
+	// tester tour à tour avec RIGHT,DOWN, UP, LEFT
+	/*if(can_move(g,RIGHT)){ 
     		do_move(g,RIGHT);
    		add_tile(g);
     		printf("\n le mouvement est valide \n \n");
    
-  	}
+  	}*/
+
+	// test de game over
+	
+	for (int colonne=0; colonne<GRID_SIDE; ++colonne){
+		for (int ligne=0; ligne<GRID_SIDE; ++ligne){
+			set_tile (g,colonne, ligne, colonne+ligne+1);//colone+ligne donnera un nombre différent à chaque fois
+			}
+		}
+	afficher(g);
+	int dirRand= rand()%4; // valariable pour choisir la direction de facon aléatoire
+		printf("le mouvement que l'on va faire est %d (0->droite, 1->bas,2->haut,3->gauche) \n",dirRand);
+		switch (dirRand){
+			case 0:	
+				dirRand=RIGHT;
+			break;
+			case 1:
+				dirRand=DOWN;
+			break;
+			case 2:
+				dirRand=UP;
+			break;
+			case 3:
+				dirRand=LEFT;
+			break;
+		}
+	play(g, dirRand);
+	afficher(g);
 	
 
 	return EXIT_SUCCESS;
