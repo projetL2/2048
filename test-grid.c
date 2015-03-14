@@ -1,4 +1,5 @@
 //fichier test-grid.c
+#include <ncurses.h>
 #include "grid.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,21 +10,24 @@
 //fonction obligatoire pour tester notre grille et son affichage
 void afficher (grid g) {
 
-    printf (" +~~~~+~~~~+~~~~+~~~~+ \n ");
+	clear();
+
+    printw (" +~~~~+~~~~+~~~~+~~~~+ \n ");
     
     for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
-        printf("|");
+        printw("|");
 		for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
             tile res = (get_tile (g,colonne,ligne));
             if (res == 0)
-                printf ("    |"); // on affiche pas 0 pour plus de lisibilité.
+                printw ("    |"); // on affiche pas 0 pour plus de lisibilité.
             else
-                printf ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de la tile. 
+                printw ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de la tile. 
         }
-        printf ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
+        printw ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
     }
 
-    printf ("Votre score est de %lu points\n", grid_score(g));
+    printw ("Votre score est de %lu points\n", grid_score(g));
+    
 }
 
 
@@ -138,36 +142,43 @@ int main (void) {
 	//Tests d'entrées utilisateur//
 	//***************************//
 	
-	/*
+	initscr();  // initialisation de ncurses
+	keypad(stdscr, TRUE);  // on active le clavier
+	noecho();  // le choix utilisateur ne sera pas affiché
+	
 	int a; // variable int qui contient le choix utilisateur
 	dir d; // la direction qui va correspondre
-	
+
 	add_tile(g);
 	afficher(g);
 
-	printf("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
+	//printw("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
 	
-	for (int i=0; i<10; i++) { // on va boucler 10 fois pour le test
-		
-		scanf("%d", &a); // récupère un int dans la variable a 		
+	while(!game_over(g)) { // on va boucler 10 fois pour le test
+		a = getch();
+		//scanf("%d", &a); // récupère un int dans la variable a 		
 		switch (a){  // switch qui fait correspondre l'int au dir
-			case 0:	
+			case KEY_RIGHT:	
 				d=RIGHT;
 			break;
-			case 1:
+			case KEY_LEFT:
 				d=LEFT;
 			break;
-			case 2:
+			case KEY_UP:
 				d=UP;
 			break;
-			case 3:
+			case KEY_DOWN:
 				d=DOWN;
 			break;
 		}
 		play(g,d);
 		afficher(g);
-		printf("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
+		//printf("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
 	}
-	*/
+	clear();
+	
+	printw("GAME OVER\n");
+	endwin();
+	
 	return EXIT_SUCCESS;
 }

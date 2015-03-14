@@ -13,7 +13,7 @@ OUTFILE=  test-grid
 OBJS= grid.o  test-grid.o 
 
 #les bibliotheques utilisees
-LDLIBS= -lm
+LDLIBS= -lm -lncurses
 
 
 $(OUTFILE): $(OBJS)
