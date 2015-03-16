@@ -27,6 +27,10 @@ grid new_grid () {
         g->grid[i] = malloc (GRID_SIDE * sizeof(tile));
         assert (g->grid[i]!=NULL);
     }
+    
+    for(int i=0; i<GRID_SIDE; ++i)
+		for(int j=0; j<GRID_SIDE; ++j)
+			g->grid[i][j]=0;
 
     return g;
 }

@@ -147,13 +147,13 @@ int main (void) {
 	noecho();  // le choix utilisateur ne sera pas affiché
 	
 	int a; // variable int qui contient le choix utilisateur
-	int b;
+	//int b;
 	dir d; // la direction qui va correspondre
 
 	add_tile(g);
 	afficher(g);
 	
-	while(!game_over(g)) { // boucle de jeu
+	while(1) { // boucle de jeu
 	  a = getch(); // récupère dans a le code de la touche appuyée		
 		switch (a){  // switch qui fait correspondre l'int au dir
 			case KEY_RIGHT:	
@@ -171,17 +171,30 @@ int main (void) {
 		}
 		play(g,d);
 		afficher(g);
+		
+		if(game_over(g)) {
+			
+			do {
+				clear();
+				afficher(g);
+				printw("GAME OVER\nVotre score : %d\nq : quitter\nr : rejouer\n", grid_score(g));
+				a=getch();
+				
+				if(a=='q') { 
+					   
+					endwin(); // arrete la fenetre ncurses
+					return EXIT_SUCCESS;
+				}
+				
+				else if (a=='r') {
+					
+					delete_grid(g);
+					grid g = new_grid();
+					add_tile(g);
+					afficher(g);
+				}
+			}	
+			while(game_over(g));			
+		}	
 	}
-
-	printw("GAME OVER\nBACKSPACE : quitter\nENTREE : rejouer\n");
-	
-	/*b=getch(); // on récupère l'entrée utilisateur
-
-	while(b!=KEY_BACKSPACE || b!=KEY_ENTER)
-		printw("bite");
-	  if(b==KEY_BACKSPACE) {*/
-	  
-	    endwin(); // arrete la fenetre ncurses
-	    return EXIT_SUCCESS;
-	//}
 }
