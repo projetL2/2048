@@ -10,7 +10,7 @@
 //fonction obligatoire pour tester notre grille et son affichage
 void afficher (grid g) {
 
-  clear();   //fonction de ncurses qui rafraichit l'affichage  
+	clear();
 
     printw (" +~~~~+~~~~+~~~~+~~~~+ \n ");
     
@@ -19,7 +19,7 @@ void afficher (grid g) {
 		for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
             tile res = (get_tile (g,colonne,ligne));
             if (res == 0)
-                printw ("    |");
+                printw ("    |"); // on affiche pas 0 pour plus de lisibilité.
             else
                 printw ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de la tile. 
         }
@@ -147,14 +147,16 @@ int main (void) {
 	noecho();  // le choix utilisateur ne sera pas affiché
 	
 	int a; // variable int qui contient le choix utilisateur
-	int b;
 	dir d; // la direction qui va correspondre
 
 	add_tile(g);
 	afficher(g);
+
+	//printw("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
 	
-	while(!game_over(g)) { // boucle de jeu
-	  a = getch(); // récupère dans a le code de la touche appuyée		
+	while(!game_over(g)) { // on va boucler 10 fois pour le test
+		a = getch();
+		//scanf("%d", &a); // récupère un int dans la variable a 		
 		switch (a){  // switch qui fait correspondre l'int au dir
 			case KEY_RIGHT:	
 				d=RIGHT;
@@ -171,17 +173,12 @@ int main (void) {
 		}
 		play(g,d);
 		afficher(g);
+		//printf("droite = 0	gauche = 1	haut = 2	bas = 3\n"); // propositions
 	}
-
-	printw("GAME OVER\nBACKSPACE : quitter\nENTREE : rejouer\n");
+	clear();
 	
-	/*b=getch(); // on récupère l'entrée utilisateur
-
-	while(b!=KEY_BACKSPACE || b!=KEY_ENTER)
-		printw("bite");
-	  if(b==KEY_BACKSPACE) {*/
-	  
-	    endwin(); // arrete la fenetre ncurses
-	    return EXIT_SUCCESS;
-	//}
+	printw("GAME OVER\n");
+	endwin();
+	
+	return EXIT_SUCCESS;
 }
