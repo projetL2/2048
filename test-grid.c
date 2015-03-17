@@ -15,6 +15,7 @@ void afficher (grid g) {
 	int i=0;
 	char base[6*GRID_SIDE]="";
 	strcat(base," ");
+//creation d'une boucle pour un affichage adapté à la taille donnée dans le point h
   while(i<GRID_SIDE){
 	strcat(base,"+~~~~");
 	i++;
@@ -31,8 +32,7 @@ void afficher (grid g) {
             else
                 printw ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de la tile. 
         }
-        //printw ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
-	printw("\n");
+       	printw("\n");
 	printw(base);
     }
 
