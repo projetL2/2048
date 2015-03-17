@@ -172,29 +172,29 @@ int main (void) {
 		play(g,d);
 		afficher(g);
 		
-		if(game_over(g)) {
+		if(game_over(g)) {    // on verifie si on a perdu
 			
 			do {
 				clear();
 				afficher(g);
-				printw("GAME OVER\nVotre score : %d\nq : quitter\nr : rejouer\n", grid_score(g));
+				printw("GAME OVER\nVotre score : %d\nq : quitter\nr : rejouer\n", grid_score(g));   // on affiche le score et les choix
 				a=getch();
 				
-				if(a=='q') { 
+				if(a=='q') { 				// si l'utilisateur appuie sur q
 					   
 					endwin(); // arrete la fenetre ncurses
-					return EXIT_SUCCESS;
+					return EXIT_SUCCESS; // fin du programme
 				}
 				
-				else if (a=='r') {
+				else if (a=='r') {			// si l'utilisateur appuie sur r
 					
 					delete_grid(g);
-					grid g = new_grid();
+					grid g = new_grid();		// on supprime la grille et on en crée une nouvelle
 					add_tile(g);
 					afficher(g);
 				}
 			}	
-			while(game_over(g));			
+			while(game_over(g));			// si game_over n'est plus vrai on retourne dans la boucle de jeu
 		}	
 	}
 }

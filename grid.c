@@ -28,7 +28,7 @@ grid new_grid () {
         assert (g->grid[i]!=NULL);
     }
     
-    for(int i=0; i<GRID_SIDE; ++i)
+    for(int i=0; i<GRID_SIDE; ++i)		// on initialise les cases à 0
 		for(int j=0; j<GRID_SIDE; ++j)
 			g->grid[i][j]=0;
 
@@ -206,7 +206,6 @@ void do_move (grid g, dir d) {
         for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
             flag = 0;
             for (int ligne=1; ligne<GRID_SIDE; ++ligne) {
-                //printf("ligne : %d\n", ligne);
                 if (get_tile(g,colonne,ligne) != 0) {
                     if (get_tile(g,colonne,ligne-1) == 0) {
                         set_tile(g,colonne,ligne-1,get_tile(g,colonne,ligne));
