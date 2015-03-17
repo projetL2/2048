@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include<string.h>
 //ce fichier test est creer dans le but de tester la création, copie, supression et biensur l'affichage de la grille.
 //ce programme à été lancer avec valgrind pour verifier les fuites de memoires.
 
@@ -11,8 +12,15 @@
 void afficher (grid g) {
 
   clear();   //fonction de ncurses qui rafraichit l'affichage  
-
-    printw (" +~~~~+~~~~+~~~~+~~~~+ \n ");
+	int i=0;
+	char base[6*GRID_SIDE]="";
+	strcat(base," ");
+  while(i<GRID_SIDE){
+	strcat(base,"+~~~~");
+	i++;
+	}
+	strcat(base,"+ \n ");
+ 	printw (base);
     
     for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
         printw("|");
@@ -23,7 +31,9 @@ void afficher (grid g) {
             else
                 printw ("%4d|",res); //on reserve la place de 4chiffres quel que soit le nombre réel de la tile. 
         }
-        printw ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
+        //printw ("\n +~~~~+~~~~+~~~~+~~~~+ \n ");
+	printw("\n");
+	printw(base);
     }
 
     printw ("Votre score est de %lu points\n", grid_score(g));
