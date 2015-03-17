@@ -1,0 +1,62 @@
+\documentclass{report}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{setspace}
+\usepackage{listings} 
+\usepackage{hyperref}
+
+\begin{document}
+\lstset{language=C}
+
+\title{Compte-rendu N 3 de projet 2048}
+\author{Guillaume ALMYRE 
+\and
+Ga\"{e}tan CHAMBRES
+\and
+Allan MAHAZOASY
+\and 
+Chrystelle PETUREAU}
+\date{09/03/2015}
+
+\maketitle
+
+\section*{Informations sur le travail en groupe:}
+L'adresse du d\'{e}p\^{o}t : \url{https://github.com/projetL2/2048.git} \\Les identifiants sont :
+\begin{description}
+\item [username : ] projetL2
+\item [password : ] IN4001ggc  (pour Guillaume, Ga\"{e}tan, Chrystelle)
+\end{description}
+
+\section*{Etat des fonctions:}
+\begin{description}
+Le probl\`{e}me de get-tile \'{e}tait en fait un probl\`{e}me avec "afficher" qui avait une double boucle dans l'autre sens de "get-tile".\\
+Toutes les m\'{e}thodes fonctionnent parfaitement \`{a} ce jour. Nous avons une version jouable du 2048. Il reste \`{a} optimiser le code en question.
+\end{description}
+
+\section*{Tests effectu\'{e}s:}
+\begin{description}
+\item [afficher, set-tile et get-tile:] Premi\`{e}res vraies fonctions de cr\'{e}\'{e}es, elles sont vitales pour tester les autres. Depuis le d\'{e}but du projet, elles ont servit un nombre incalculable de fois sans jamais r\'{e}v\'{e}ler aucun probl\`{e}me. Donc, elles fonctionnent parfaitement.\\
+\item [new-grid :] On l'a test\'{e} dans le ficher test principal. Elle fait partie aussi de la base des tests des autres fonctions et n'a r\'{e}v\'{e}l\'{e} aucun probl\`{e}me \`{a} ce jour.\\
+\item [add-tile :] Son test a consist\'{e} principalement \`{a} associer new-grid, afficher et add-tile dans une boucle for pour v\'{e}rifier son aspect al\'{e}atoire.\\
+\item [copy-grid :]Associ\'{e}e \`{a} afficher, elle nous semble tout \`{a} fait identique.\\
+\item [delete-grid :] On fait un fichier test avec new-grid, add-tile, copy-grid puis delete-grid. Ce fichier a \'{e}t\'{e} lancer avec valgrind pour v\'{e}rifier les \'{e}ventuelles fuites de m\'{e}moire.\\
+\item [do-move :] Elle a \'{e}t\'{e} test\'{e}e dans une boucle for avec l'utilisation de la fonction random.\\
+\item [grid-score et can-move :] Sont test\'{e}es \`{a} chaque boucle.\\
+
+\item [play et game-over:] Un fichier particulier a \'{e}t\'{e} cr\'{e}er pour tester les possibilit\'{e}s de jeux. On a utilis\'{e} la biblioth\`{e}que NCURSES pour cela.  
+\end{description}
+
+\section*{Objectifs pour la s\'{e}ance du 17/03 :}
+\begin{itemize}
+
+\item Allan a cr\'{e}\'{e} un algorithme de gestion des cases vides, on doit l'ins\'{e}rer au code principal.\\
+
+\item mettre dans les cases les puissances de 2 et non le nombre directement.
+
+	
+\end{itemize}
+
+
+\end{document}

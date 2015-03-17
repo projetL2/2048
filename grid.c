@@ -231,12 +231,13 @@ void add_tile (grid g) {
 }
 
 // fonction qui doit récuperer les instruction du joueur
-void play (grid g, dir d) {
+//A TRANSFORMER!!!
+	void play (grid g, dir d) {
 	if (game_over(g))
 		printf("vous avez perdu\n");
-    	/*else (can_move(g,d)){  // si on peut jouer
-        	do_move(g,d);  // on joue: on effectue le deplacement
-        	add_tile(g);    // on ajoute une tile
-	}*/
+    	can_move(g,d);  // si on peut jouer
+        do_move(g,d);  // on joue: on effectue le deplacement
+        add_tile(g);    // on ajoute une tile
+	}
     		
 }

@@ -55,7 +55,7 @@ int main (void) {
 	/*printf("on rentre dans la boucle de test des mouvements\n");	
 	for(int i = 0; i<10; i++) { // creation d'une boucle pour tester add_tile 
 			
-		int dirRand= rand()%3; // valariable pour choisir la direction de facon aléatoire
+		int dirRand= rand()%4; // valariable pour choisir la direction de facon aléatoire
 		printf("le mouvement que l'on va faire est %d (0->droite, 1->bas,2->haut,3->gauche) \n",dirRand);
 		switch (dirRand){
 			case 0:	
@@ -77,9 +77,9 @@ int main (void) {
 	}
 	printf("on est sorti de la boucle");*/
 
-	//test sur les acceptations (ou non) de mouvement de can_move et les mouvement réellement effectués
+	//test sur les acceptations (ou non) de mouvement de can_move et les mouvements réellement effectués
 	//add_tile rempli une case de façon aléatoire, on demande un mouvement en particulier
-	// à nous visuellement de verifié si can_move devait l'accepeter ou non
+	// à nous visuellement de verifier si can_move devait l'accepeter ou non
 	// tester tour à tour avec RIGHT,DOWN, UP, LEFT
 	/*if(can_move(g,RIGHT)){ 
     		do_move(g,RIGHT);
@@ -88,15 +88,14 @@ int main (void) {
    
   	}*/
 
-	// test de game over
-	
+	// test de game over	
 	for (int colonne=0; colonne<GRID_SIDE; ++colonne){
 		for (int ligne=0; ligne<GRID_SIDE; ++ligne){
 			set_tile (g,colonne, ligne, colonne+ligne+1);//colone+ligne donnera un nombre différent à chaque fois
 			}
 		}
 	afficher(g);
-	int dirRand= rand()%4; // valariable pour choisir la direction de facon aléatoire
+	int dirRand= rand()%4; // variable pour choisir la direction de facon aléatoire
 		printf("le mouvement que l'on va faire est %d (0->droite, 1->bas,2->haut,3->gauche) \n",dirRand);
 		switch (dirRand){
 			case 0:	
