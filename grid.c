@@ -185,7 +185,7 @@ void do_move (grid g, dir d) {
         for (int colonne=0; colonne<GRID_SIDE; ++colonne) { // on parcourt de gauche à droite
 			flag = GRID_SIDE-1;
             for (int ligne = GRID_SIDE-2; ligne>=0; --ligne)  {// de bas en haut
-                if (get_tile(g,colonne,ligne) != 0 && ligne < GRIDE_SIDE -1) {
+                if (get_tile(g,colonne,ligne) != 0 && ligne < GRID_SIDE -1) {
                     if (get_tile(g,colonne,ligne+1) == 0) {
                         set_tile(g,colonne,ligne+1,get_tile(g,colonne,ligne));
                         set_tile(g,colonne,ligne,0);
