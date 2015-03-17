@@ -5,15 +5,15 @@
 #include <stdio.h>
 
 
-// La structure de la grille, un pointeur de pointeur qui nous donnera la matrice
-// et un unsigned long int score
+// La structure de la grille, avec un pointeur de pointeur qui donne la matrice
+// et un unsigned long int pour le score
 struct grid_s {
     unsigned long int score;
     tile** grid;
 };
 
-//Le constructeur, on initialise le score Ã  0
-//et on fait des malloc pour la struct et la grille
+//Le constructeur, qui initialise le score à 0
+//et qui fait des malloc pour la structure et la grille
 grid new_grid () {
 
     grid g = malloc(sizeof(struct grid_s));
@@ -27,11 +27,16 @@ grid new_grid () {
         g->grid[i] = malloc (GRID_SIDE * sizeof(tile));
         assert (g->grid[i]!=NULL);
     }
+    
+    for(int i=0; i<GRID_SIDE; ++i)		// on initialise les cases à 0
+		for(int j=0; j<GRID_SIDE; ++j)
+			g->grid[i][j]=0;
 
     return g;
 }
 
-//Destructeur de la grille, on libÃ¨re d'abord les zones mÃ©moire pointÃ©es par la variable grid puis la grille elle-mÃªme
+//Destructeur de la grille,
+//qui libère d'abord les zones mémoire pointées par la variable grid puis la grille elle-même
 void delete_grid (grid g) {
 
     for (int i=0; i<GRID_SIDE; ++i)
@@ -47,7 +52,7 @@ void copy_grid (grid src, grid dst) {
 
     for (int i=0; i<GRID_SIDE; ++i)
         for (int j=0; j<GRID_SIDE; ++j)
-            set_tile(dst,i,j,get_tile(src,i,j)); //On initialise la tuile de dst avec la valeur de celle de src
+            set_tile(dst,i,j,get_tile(src,i,j)); //On initialise la tile de dst avec la valeur de celle de src
 
 }
 
@@ -57,24 +62,24 @@ unsigned long int grid_score (grid g) {
     return g->score;
 }
 
-//Accesseur qui renvoie une tile en fonction des coordonnÃ©es en paramÃ¨tres
+//Accesseur qui renvoie une tile en fonction des coordonnées passées en paramètres
 tile get_tile (grid g, int colonne, int ligne) {
 
     assert((colonne>=0 && colonne<GRID_SIDE) && (ligne>=0 && ligne<GRID_SIDE));
     return g->grid[colonne][ligne]; // si la tile est dans les limites de la grille, on la renvoie
 }
 
-//Accesseur qui instancie la valeur d'une tile en fonction des coordonnÃ©es et de la valeur en paramÃ¨tres
+//Accesseur qui modifie la valeur d'une tile en fonction des coordonnées et de la valeur passés en paramètres
 void set_tile (grid g, int colonne, int ligne, tile t) {
 
     g->grid[colonne][ligne] = t;
 }
 
-//Fonction boolÃ©ene qui renvoie true si le joueur peut effectuer un movement dans une direction
+//Fonction booléene qui renvoie true si le joueur peut effectuer un mouvement dans une direction
 bool can_move (grid g, dir d) {
 
-    // on vÃ©rifie la direction demandÃ©e (d)
-    // suivant cette derniÃ¨re, on parcourt la grille pour voir si on peut dÃ©placer ou fusionner,
+    // on regarde la direction demandée (d)
+    // suivant celle_ci, on parcourt la grille pour voir si on peut, quelque part, faire un déplacement ou une fusion,
     //si oui, on renvoie true
     switch (d) {
 
@@ -110,11 +115,11 @@ bool can_move (grid g, dir d) {
                         return true;
         break;
     }
-    // Si le mouvement demandÃ© est impossible, on renvoie false
+    // Si le mouvement demandé est impossible, on renvoie false
     return false;
 }
 
-//Fonction boolÃ©enne qui renvoie TRUE si aucun mouvement n'est plus possible.
+//Fonction booléenne qui renvoie TRUE si aucun mouvement n'est plus possible.
 bool game_over(grid g) {
 
     if ( !can_move(g,UP) && !can_move(g,DOWN) &&
@@ -125,25 +130,29 @@ bool game_over(grid g) {
         return false;
 }
 
-//Fonction qui dÃ©place les tiles de la grid si le mouvement est possible
+//Fonction qui déplace les tiles de la grid si le mouvement est possible
 void do_move (grid g, dir d) {
+
+	int flag;
 
     switch (d) {
 
     case LEFT:
-        for (int colonne = 0; colonne<GRID_SIDE; ++colonne) {	// on parcourt de gauche Ã  droite
-            for (int ligne = 0; ligne<GRID_SIDE; ++ligne) {   // et de haut en bas
+        for (int ligne = 0; ligne<GRID_SIDE; ++ligne) {	// on parcourt de gauche à droite
+            flag = 0;
+            for (int colonne = 1; colonne<GRID_SIDE; ++colonne) {   // et de haut en bas     
                 if (get_tile(g,colonne,ligne) != 0) { // si la case n'est pas vide
-                    if (get_tile(g,colonne-1,ligne) == 0) {  // si la case de gauche est vide, on dÃ©cale la case actuelle
+                    if (get_tile(g,colonne-1,ligne) == 0) {  // si la case de gauche est vide, on décale la case actuelle
                         set_tile(g,colonne-1,ligne,get_tile(g,colonne,ligne));
                         set_tile(g,colonne,ligne,0);
-                        if(colonne>1)
-							colonne-=2; // on dÃ©crÃ©mente i au cas oÃ¹ il y ait Ã  dÃ©placer la tile plusieurs fois
+                        if(colonne >1)
+							colonne-=2; // on décrémente i au cas où il y ait à déplacer la tile plusieurs fois
                     }
-                    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne-1,ligne)) { // s'il doit y avoir une fusion
+                    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne-1,ligne) && colonne > flag) { // s'il doit y avoir une fusion
                         set_tile(g,colonne,ligne,0);
-                        set_tile(g,colonne-1,ligne,(get_tile(g,colonne-1,ligne)*2));				// on vide la case actuelle et on double la valeur de celle qu'elle a heurtÃ©
+                        set_tile(g,colonne-1,ligne,(get_tile(g,colonne-1,ligne)*2));				// on vide la case actuelle et on double la valeur de celle qu'elle a heurté
                         g->score += get_tile(g,colonne-1,ligne);		// on actualise le score
+                        flag = colonne;
                     }
                 }
             }
@@ -152,7 +161,8 @@ void do_move (grid g, dir d) {
         break;
 
     case RIGHT:
-        for (int ligne=0; ligne<GRID_SIDE; ++ligne) {// on parcourt de droite Ã  gauche
+        for (int ligne=0; ligne<GRID_SIDE; ++ligne) {// on parcourt de droite à gauche
+            flag = GRID_SIDE-1;
             for (int colonne = GRID_SIDE-2; colonne>=0; --colonne) { // et haut en bas
                 if (get_tile(g,colonne,ligne) != 0 && colonne < 3) {
                     if (get_tile(g,colonne+1,ligne) == 0) {
@@ -160,48 +170,54 @@ void do_move (grid g, dir d) {
                         set_tile(g,colonne,ligne,0);
                         colonne+=2;
                     }
-                    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne+1,ligne)) {
+                    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne+1,ligne) && colonne < flag) {
                         set_tile(g,colonne,ligne,0);
-                        set_tile(g,colonne-1,ligne,(get_tile(g,colonne+1,ligne)*2));
+                        set_tile(g,colonne+1,ligne,(get_tile(g,colonne+1,ligne)*2));
                         g->score += get_tile(g,colonne+1,ligne);
+                        flag = colonne;
                     }
                 }
             }
         }
         break;
 
-    case DOWN: //RE ECRIRE EN UTILISANT LES ACCESSEURS
-        for (int colonne=0; colonne<GRID_SIDE; ++colonne) { // on parcourt de gauche Ã  droite
+    case DOWN:
+        for (int colonne=0; colonne<GRID_SIDE; ++colonne) { // on parcourt de gauche à droite
+			flag = GRID_SIDE-1;
             for (int ligne = GRID_SIDE-2; ligne>=0; --ligne)  {// de bas en haut
-                if (g->grid[colonne][ligne] != 0 && ligne < 3) {
-                    if (g->grid[colonne][ligne+1] == 0) {
-                        g->grid[colonne][ligne+1] = g->grid[colonne][ligne];
-                        g->grid[colonne][ligne] = 0;
+                if (get_tile(g,colonne,ligne) != 0 && ligne < 3) {
+                    if (get_tile(g,colonne,ligne+1) == 0) {
+                        set_tile(g,colonne,ligne+1,get_tile(g,colonne,ligne));
+                        set_tile(g,colonne,ligne,0);
                         ligne+=2;
                     }
-                    else if (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) {
-                        g->grid[colonne][ligne] = 0;
-                        g->grid[colonne][ligne+1] *= 2;
-                        g->score += g->grid[colonne][ligne+1];
+                    else if (get_tile(g,colonne,ligne) == get_tile(g,colonne,ligne+1) && ligne < flag) {
+                        set_tile(g,colonne,ligne,0);
+                        set_tile(g,colonne,ligne+1,get_tile(g,colonne,ligne+1)*2);
+                        g->score += get_tile(g,colonne,ligne+1);
+                        flag = ligne;
                     }
                 }
             }
         }
         break;
 
-    case UP: //RE ECRIRE EN UTILISANT LES ACCESSEURS
+    case UP:
         for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
-            for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
-                if (g->grid[colonne][ligne] != 0) {
-                    if (g->grid[colonne][ligne-1] == 0) {
-                        g->grid[colonne][ligne-1] = g->grid[colonne][ligne];
-                        g->grid[colonne][ligne]=0;
-                        ligne-=2;
+            flag = 0;
+            for (int ligne=1; ligne<GRID_SIDE; ++ligne) {
+                if (get_tile(g,colonne,ligne) != 0) {
+                    if (get_tile(g,colonne,ligne-1) == 0) {
+                        set_tile(g,colonne,ligne-1,get_tile(g,colonne,ligne));
+                        set_tile(g,colonne,ligne,0);
+                        if(ligne>1)
+							ligne-=2;
                     }
-                    else if (g->grid[colonne][ligne+1] == g->grid[colonne][ligne]) {
-                        g->grid[colonne][ligne] = 0;
-                        g->grid[colonne][ligne] *= 2;
-                        g->score += g->grid[colonne][ligne-1];
+                    else if (get_tile(g,colonne,ligne-1) == get_tile(g,colonne,ligne) && ligne > flag) {
+                        set_tile(g,colonne,ligne,0);
+                        set_tile(g,colonne,ligne-1,get_tile(g,colonne,ligne-1)*2);
+                        g->score += get_tile(g,colonne,ligne-1);
+                        flag = ligne;
                     }
                 }
             }
@@ -209,35 +225,32 @@ void do_move (grid g, dir d) {
         break;
     }
 }
-// fonction qui ajoute une tile de fonction alÃ©atoire dans une case vide de la grid
+// fonction qui ajoute une tile de façon aléatoire dans une case vide de la grid
 void add_tile (grid g) {
-// il faut creer une structure avec une liste des cases vide et faire le random sur cette liste
-// peut etre avec un tableau de int avec le 1er chiffre la colonne et  2 eme chiffre la colonne
+// il faut créer une structure avec une liste des cases vides et faire le random sur cette liste
+// peut être avec un tableau de int avec le 1er chiffre la colonne et  2 eme chiffre la colonne
 
-    int numberRand = rand()%10; //entier alÃ©atoire entre 0 et 10
+    int numberRand = rand()%10; //entier aléatoire entre 0 et 10
 
-    int colonneRand = rand()%GRID_SIDE;// choix d'une colonne alÃ©atoirement
-    int ligneRand = rand()%GRID_SIDE; // choix d'une ligne alÃ©atoirement
+    int colonneRand = rand()%GRID_SIDE;// choix d'une colonne aléatoirement
+    int ligneRand = rand()%GRID_SIDE; // choix d'une ligne aléatoirement
 
-    while(g->grid[colonneRand][ligneRand]!=0) { // si la case est occupÃ© on refait des random jusqu'a en trouver une vide.
+    while(get_tile(g,colonneRand,ligneRand)!=0) { // si la case est occupé on refait des random jusqu'a en trouver une vide.
         colonneRand = rand()%GRID_SIDE;
         ligneRand = rand()%GRID_SIDE;
     }
 
-    if(numberRand == 9)// 4 doit avoir une chance sur 10 d'etre choix, on a prit le chiffre 9 de faÃ§on arbitraire, fallait choisir un chiffre!
+    if(numberRand == 9)// 4 doit avoir une chance sur 10 d'être choix, on a prit le chiffre 9 de façon arbitraire, fallait choisir un chiffre!
         set_tile(g,colonneRand,ligneRand,4);
     else
         set_tile(g,colonneRand,ligneRand,2);
 }
 
-// fonction qui doit rÃ©cuperer les instruction du joueur
-//A TRANSFORMER!!!
-	void play (grid g, dir d) {
-	if (game_over(g))
-		printf("vous avez perdu\n");
-    	can_move(g,d);  // si on peut jouer
-        do_move(g,d);  // on joue: on effectue le deplacement
-        add_tile(g);    // on ajoute une tile
+// fonction qui doit récupérer les instructions du joueur
+void play (grid g, dir d) {
+    
+    if (can_move(g,d)){  // si on peut jouer
+		do_move(g,d);  // on joue: on effectue le deplacement
+		add_tile(g);    // on ajoute une tile
 	}
-    		
 }
