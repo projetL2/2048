@@ -7,10 +7,10 @@ CC= gcc
 CFLAGS= -std=c99 -Wall -g
 
 #le nom du fichier executable
-OUTFILE=  test-grid
+OUTFILE=  jeu
 
 #les fichiers objets
-OBJS= grid.o  test-grid.o 
+OBJS= grid.o  jeu.o 
 
 #les bibliotheques utilisees
 LDLIBS= -lm -lncurses
