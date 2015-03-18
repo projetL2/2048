@@ -53,15 +53,15 @@ int main (void) {
 	noecho();  // le choix utilisateur ne sera pas affiché
 	
 	int a; // variable int qui contient le choix utilisateur
-	//int b;
 	dir d; // la direction qui va correspondre
 
 	add_tile(g);
 	afficher(g);
 	
 	while(1) { // boucle de jeu
+		
 	  a = getch(); // récupère dans a le code de la touche appuyée		
-		switch (a){  // switch qui fait correspondre l'int au dir
+		switch (a){  // switch qui fait correspondre l'int à la direction
 			case KEY_RIGHT:	
 				d=RIGHT;
 			break;
@@ -75,16 +75,17 @@ int main (void) {
 				d=DOWN;
 			break;
 		}
-		play(g,d);
+		
+		play(g,d);			// on joue et on réaffiche la grille à chaque tour de boucle
 		afficher(g);
 		
 		if(game_over(g)) {    // on verifie si on a perdu
 			
 			do {
-				clear();
+				clear();		// on fait un do while afin de pouvoir revenir à ce stade si le joueur appuie sur une touche non valide
 				afficher(g);
 				printw("GAME OVER\nVotre score : %d\nq : quitter\nr : rejouer\n", grid_score(g));   // on affiche le score et les choix
-				a=getch();
+				a=getch();		// choix du joueur
 				
 				if(a=='q') { 				// si l'utilisateur appuie sur q
 					   
@@ -95,8 +96,8 @@ int main (void) {
 				else if (a=='r') {			// si l'utilisateur appuie sur r
 					
 					delete_grid(g);
-					grid g = new_grid();		// on supprime la grille et on en crée une nouvelle
-					add_tile(g);
+					grid g = new_grid();		// on supprime la grille et on en crée une nouvelle ce qui fera de nouveau renvoyer false à game_over
+					add_tile(g);			// on prépare de nouveau le terrain avant de retourner dans la boucle de jeu
 					afficher(g);
 				}
 			}	
