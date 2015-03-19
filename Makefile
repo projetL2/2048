@@ -1,21 +1,21 @@
-#Makefile
+# Makefile
 
-#le compilateur
+# Le compilateur
 CC= gcc
 
-#les flags de compilation
+# Les flags de compilation
 CFLAGS= -std=c99 -Wall -g
 
-#le nom du fichier executable
+# Le nom du fichier executable
 OUTFILE=  jeu
 
-#les fichiers objets
+# Les fichiers objets
 OBJS= grid.o  jeu.o 
 
-#les bibliotheques utilisees
-LDLIBS= -lm -lncurses
+# Les bibliothèques utilisées
+LDLIBS= -lncurses
 
-
+# La méthode pour compiler
 $(OUTFILE): $(OBJS)
 	$(CC) $^ $(LDLIBS) -o $@
 
@@ -23,6 +23,6 @@ $(OUTFILE): $(OBJS)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 
-
+# Nettoyage des fichiers objets et exécutables
 clean:
 	rm -f $(OBJS) $(OUTFILE)
