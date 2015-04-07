@@ -10,7 +10,7 @@ CFLAGS= -std=c99 -Wall -g
 OUTFILE= jeu
 
 # Les fichiers objets:
-OBJS= grid.o easy.o strategy.o test-strat.o
+OBJS= grid.o fast.o strategy.o test-strat.o
 
 # Les bibliothèques utilisées:
 LDLIBS= -lncurses

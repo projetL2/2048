@@ -7,7 +7,7 @@
 #include <time.h>
 #include <string.h>
 #include "strategy.h"
-#include "easy.h"
+#include "fast.h"
 
 void afficher (grid g) {
 
@@ -43,45 +43,11 @@ void afficher (grid g) {
     printw ("Votre score est de %lu points\n", grid_score(g)); // Affichage du score.
     
 }
-
-int jouer(grid g, dir d){
-	play(g,d);			// On joue et on réaffiche la grille à chaque tour de boucle.
-	afficher(g);
-				
-	if(game_over(g)) {    // On vérifie si on a perdu.
-					
-		do {
-			clear();		// On fait un do while afin de pouvoir revenir à ce stade si le joueur appuie sur une touche non valide.
-			afficher(g);
-			printw("GAME OVER\nVotre score final est de : %d\nq : quitter\nr : rejouer\n", grid_score(g));   // On affiche le score et les choix.
-			int a;
-			a=getch();		// Choix du joueur.
-						
-			if(a=='q') { 	// Si l'utilisateur appuie sur q,
-							   
-					endwin(); // arrêt de la fenêtre ncurses.
-					return 0; // Fin du programme.
-			}
-						
-			else if (a=='r') {	// Si l'utilisateur appuie sur r,
-							
-					delete_grid(g);
-					grid g = new_grid();	// on supprime la grille et on en crée une nouvelle ce qui fera de nouveau renvoyer false à game_over.
-					add_tile(g);		// On prépare de nouveau le terrain avant de retourner dans la boucle de jeu.
-					afficher(g);
-			}
-		}	
-		while(game_over(g));	// Si game_over n'est plus vrai on retourne dans la boucle de jeu.
-	}
-	return 1;
-}
 	
-	
-
 int main (void) {
 
 	grid g = new_grid (); // Création d'une nouvelle grille.
-	strategy s = easyInit();
+	strategy s = fastInit(); // strategy s = efficientInit(); //ligne à changer pour tester la stratégie voulue
 	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
 	
 	
@@ -94,7 +60,7 @@ int main (void) {
 	//noecho();  // Le choix utilisateur ne sera pas affiché.
 	
 	//int a; // Variable int qui contient le choix utilisateur.
-	dir d; // Variable dir qui contient la direction qui va correspondre à a.
+	//dir d; // Variable dir qui contient la direction qui va correspondre à a.
 
 	add_tile(g);
 	add_tile(g);	// Premier affichage de la grille, avec une valeur à l'intérieur.
@@ -117,12 +83,13 @@ int main (void) {
 			if(a=='q') { 	// Si l'utilisateur appuie sur q,
 							   
 				endwin(); // arrêt de la fenêtre ncurses.
+				s-> free_strategy(s);
 				delete_grid(g);
 				return EXIT_SUCCESS; // Fin du programme.
 			}
 						
 			else if (a=='r') {	// Si l'utilisateur appuie sur r,
-							
+						
 				delete_grid(g);
 				grid g = new_grid();	// on supprime la grille et on en crée une nouvelle ce qui fera de nouveau renvoyer false à game_over.
 				add_tile(g);		// On prépare de nouveau le terrain avant de retourner dans la boucle de jeu.
