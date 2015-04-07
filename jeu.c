@@ -7,7 +7,7 @@
 #include <time.h>
 #include <string.h>
 
-void afficher (grid g) {
+void afficher(grid g) {
 
 	clear();   // Fonction de ncurses qui rafraîchit l'affichage.
 	int i=0;
@@ -41,7 +41,6 @@ void afficher (grid g) {
     printw ("Votre score est de %lu points\n", grid_score(g)); // Affichage du score.
     
 }
-
 
 int main (void) {
 
