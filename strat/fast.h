@@ -5,6 +5,6 @@
 
 dir stratFast(strategy s, grid g);
 
-strategy fastInit();
+strategy A1_almyre_chambres_mahazoasy_petureau_fast();
 
 #endif

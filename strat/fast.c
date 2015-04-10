@@ -1,36 +1,36 @@
 #include "strategy.h"
 #include <stdlib.h>
-#include <time.h>
 #include <assert.h>
 #include "fast.h"
+#include <time.h>
 
-//constructeur de s
-
-dir stratFast(strategy s, grid g) {
-
-	dir d;
-	
-	int numberRand = rand()%3;
-		switch (numberRand){  // switch qui fait correspondre l'int à la direction.
-			case 0:	
-				d=RIGHT;
-			break;
-			case 1:
-				d=LEFT;
-			break;
-			case 2:
-				d=UP;
-			break;
-			case 3:
-				d=DOWN;
-			break;
-		}
-		
-	return d;
+bool testMove (grid g, dir d){
+	return (can_move(g,d));
 }
 
-strategy fastInit() {
+//constructeur de s
+dir stratFast(strategy s, grid g) {
 	
+	dir d=RIGHT;
+	if (testMove(g,d))
+		return d;
+	
+	d=DOWN;
+	if (testMove(g,d))
+		return d;	
+
+	d=LEFT;
+	if (testMove(g,d))
+		return d;
+
+	else
+		return UP;
+	}
+
+
+
+strategy A1_almyre_chambres_mahazoasy_petureau_fast() {
+	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
 	strategy s = malloc(sizeof(struct strategy_s));
 	assert(s!=NULL);
 	

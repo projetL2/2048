@@ -43,4 +43,4 @@ $(LIB) :
 
 # Nettoyage des fichiers objets et exécutables:
 clean:
-	rm -f $(OBJS) $(OUTFILE)
+	rm -f *.o *.so
