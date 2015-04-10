@@ -8,8 +8,9 @@
 
 int calculUS(grid g){
 	int card = 0;
-	for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
+	
+	for(int i = 0; i < GRID_SIDE; ++i){
+		for(int j = 0; j < GRID_SIDE; ++j){
 			if(get_tile(g,i,j) > 0){
 				card+=1;
 			}
@@ -18,7 +19,7 @@ int calculUS(grid g){
 	return card;
  }
  
- int min(int v1, int v2){
+ int min(int v1, int v2){ 
 	 if(v1<=v2)
 		return v1;
 	return v2;
@@ -26,9 +27,9 @@ int calculUS(grid g){
  
  int calculSUP_i(grid g){
 	 int card =0;
-	 for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
-			if(/*get_tile(g,i-1,j) != NULL && */get_tile(g,i,j) < get_tile(g,i-1,j))
+	 for(int i = 1; i < GRID_SIDE; ++i){
+		for(int j = 0; j < GRID_SIDE; ++j){
+			if(get_tile(g,i,j) < get_tile(g,i-1,j))
 				card+=1;
 		}
 	}
@@ -37,9 +38,9 @@ int calculUS(grid g){
 
 int calculSUP_j(grid g){
 	int card =0;
-	 for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
-			if(/*get_tile(g,i,j-1) != NULL && */get_tile(g,i,j) < get_tile(g,i,j-1))
+	 for(int i = 0; i < GRID_SIDE; ++i){
+		for(int j = 1; j < GRID_SIDE; ++j){
+			if(get_tile(g,i,j) < get_tile(g,i,j-1))
 				card+=1;
 		}
 	}
@@ -48,9 +49,9 @@ int calculSUP_j(grid g){
 
 int calculINF_i(grid g){
 	int card = 0;
-	for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
-			if(/*get_tile(g,i-1,j) != NULL && */get_tile(g,i,j) > get_tile(g,i-1,j))
+	for(int i = 1; i < GRID_SIDE; ++i){
+		for(int j = 0; j < GRID_SIDE; ++j){
+			if(get_tile(g,i,j) > get_tile(g,i-1,j))
 				card+=1;
 		}
 	}
@@ -59,9 +60,9 @@ int calculINF_i(grid g){
 
 int calculINF_j(grid g){
 	int card = 0;
-	for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
-			if(/*get_tile(g,i,j-1) != NULL && */get_tile(g,i,j) > get_tile(g,i,j-1))
+	for(int i = 0; i < GRID_SIDE; ++i){
+		for(int j = 1; j < GRID_SIDE; ++j){
+			if(get_tile(g,i,j) > get_tile(g,i,j-1))
 				card+=1;
 		}
 	}
@@ -73,14 +74,17 @@ int calculM(grid g){
 }
 
 int calculL(grid g){
-	double val1;
-	double val2;
-	for(int i = 0; i > GRID_SIDE; ++i){
-		for(int j = 0; j< GRID_SIDE; ++j){
-			//if(get_tile(g,i-1,j) != NULL)
-				val1 += abs((get_tile(g,i,j) - get_tile(g,i-1,j)));
-			//if(get_tile(g,i,j-1) != NULL)
-				val2 += abs( (get_tile(g,i,j) - get_tile(g,i,j-1)));
+	double val1=0;		//i c'est des colonnes
+	double val2=0;		//j c'est des lignes
+
+	for(int colonne = 1; colonne < GRID_SIDE; ++colonne){
+		for(int ligne = 0; ligne < GRID_SIDE; ++ligne){
+			val1 += (abs((get_tile(g,colonne,ligne) - get_tile(g,colonne-1,ligne)))) ;			
+		}
+	}
+	for(int colonne = 0; colonne < GRID_SIDE; ++colonne){
+		for(int ligne = 1; ligne < GRID_SIDE; ++ligne){
+			val2 += (abs(get_tile(g, colonne,ligne))-(get_tile(g,colonne,ligne-1)));
 		}
 	}
 	return (int) (val1+val2);
@@ -89,40 +93,70 @@ int calculL(grid g){
 int evaluation(grid g){
 	return ( (2*calculL(g)) + (2*calculUS(g)) + (6*calculM(g)) );
 }
+	
+void triTableau(int* tabEval, dir* tabMouv) {
+	
+	int tmp = 0;
+	
+	for(int i=0; i < 3; i++) {
+		for(int j=3; j<(i+1); j--){		
+			if(min(tabEval[i],tabEval[j])==tabEval[j]) {
+				tmp = tabEval[i];
+				tabEval[i] = tabEval[j];
+				tabEval[j] = tmp;
 			
+				tmp = tabMouv[i];
+				tabMouv[i] = tabMouv[j];
+				tabMouv[j] = tmp;
+			
+				i--;
+			}
+		}
+	}
+}		
 
 dir stratEfficient(strategy s, grid g) {
 	
-	int* t = malloc(4*sizeof(int));
-	//int evalOrigin = evaluation(g);
+	int* tabEval = malloc(4*sizeof(int));		// tableau d'évaluations
+	assert(tabEval!=NULL);
+	dir* tabMouv = malloc(4*sizeof(dir));
+	assert(tabMouv!=NULL);
+	dir tmpDir;
+	
 	grid tmp = new_grid();
-	copy_grid(g, tmp);
-	do_move(tmp, UP);
-	t[0] = evaluation(tmp);
+	copy_grid(g, tmp);			// grille temporaire
+	
+	do_move(tmp, UP);			// evaluation des différents mouvements, placées dans le tableau
+	tabEval[0] = evaluation(tmp);
+	tabMouv[0] = UP;
+	
 	copy_grid(g,tmp);
 	do_move(tmp,DOWN);
-	t[1] = evaluation(tmp);
+	tabEval[1] = evaluation(tmp);
+	tabMouv[1] = DOWN;
+	
 	copy_grid(g,tmp);
 	do_move(tmp,RIGHT);
-	t[2] = evaluation(tmp);
+	tabEval[2] = evaluation(tmp);
+	tabMouv[3] = RIGHT;
+	
 	copy_grid(g,tmp);
 	do_move(tmp,LEFT);
-	t[3] = evaluation(tmp);
+	tabEval[3] = evaluation(tmp);
+	tabMouv[3] = LEFT;
 	delete_grid(tmp);
-	int i_min = 0;
-	for(int i=0; i<4; ++i){
-		if( (min(t[i_min],t[i])) == t[i] );
-			i_min = i;
-	}
-	free(t);
-	if (i_min == 0)
-		return UP;
-	if (i_min == 1)
-		return DOWN;
-	if (i_min == 2)
-		return RIGHT;
-	//if (i_min == 3)
-		return LEFT;
+	
+	triTableau(tabEval, tabMouv);
+	
+	for(int i=0; i<4; ++i)			// on determine l'éval minimum
+		if(can_move(g,tabMouv[i])) {
+			tmpDir = tabMouv[i];
+			free(tabMouv);
+			free(tabEval);
+			return tmpDir;
+		}
+	
+	return 0;
 }
 	
 	
