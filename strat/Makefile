@@ -1,3 +1,14 @@
+#ATTENTION makefile à utiliser que pour tester en privé la strategie sinon 
+
+#telecharger tournament file:///net/stockage/pp1/strategies/
+
+#chmod +x tournament
+
+#gcc -std=c99 -fPIC -c grid.c -o grid.o
+#gcc -std=c99 -fPIC -c strategy.c -o strategy.o
+#gcc -std=c99 -fPIC -c fast.c -o fast.o
+#gcc -shared -Wl,-soname,libA1_almyre_chambres_mahazoasy_petureau_fast.so.1 -o libA1_almyre_chambres_mahazoasy_petureau_fast.so *.o
+
 # Makefile
 
 # Le compilateur:
@@ -7,10 +18,10 @@ CC= gcc
 CFLAGS= -std=c99 -Wall -g
 
 # Le nom du fichier executable:
-OUTFILE= jeu
+OUTFILE= test-strat
 
 # Les fichiers objets:
-OBJS= grid.o efficient.o strategy.o test-strat.o
+OBJS= grid.o libgrid.a strategy.o test-strat.o efficient.o #ou fast.o
 
 # Les bibliothèques utilisées:
 LDLIBS= -lncurses
