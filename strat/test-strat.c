@@ -9,9 +9,10 @@
 #include "strategy.h"
 #include "efficient.h"
 
+
 void afficher (grid g) {
 
-	clear();   // Fonction de ncurses qui rafraîchit l'affichage.
+	//clear();   // Fonction de ncurses qui rafraîchit l'affichage.
 	int i=0;
 	char base[5*GRID_SIDE+6]="";	// On crée une chaine de caractères base qui va contenir les barres horizontales de la grille.
 	strcat(base," ");
@@ -23,55 +24,32 @@ void afficher (grid g) {
 	}
 	
 	strcat(base,"+ \n ");		// A la fin de la ligne, on fait un retour à la ligne.
- 	printw (base);
+ 	printf (base);
     
     // Boucle d'affichage de l'intérieur de la grille.
     for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
-        printw("|");
+        printf("|");
 		for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
             tile res = (get_tile (g,colonne,ligne));
             if (res == 0)
-                printw ("    |");		// Si la tile vaut 0, on n'écrit rien, pour plus de lisibilité.
+                printf ("    |");		// Si la tile vaut 0, on n'écrit rien, pour plus de lisibilité.
             else
-                printw ("%4d|",res); // On résèrve la place pour 4 chiffres quel que soit le nombre réel de la tile. 
+                printf ("%4d|",res); // On résèrve la place pour 4 chiffres quel que soit le nombre réel de la tile. 
         }
-       	printw("\n");
+       	printf("\n");
        	
-	printw(base);		// A chaque tour de boucle, on affiche la chaîne base.
+	printf(base);		// A chaque tour de boucle, on affiche la chaîne base.
     }
 
-    printw ("Votre score est de %lu points\n", grid_score(g)); // Affichage du score.
+    printf ("Votre score est de %lu points\n", grid_score(g)); // Affichage du score.
     
 }
-	
-int main (void) {
-
-	grid g = new_grid (); // Création d'une nouvelle grille.
-	strategy s = efficientInit(); // strategy s = efficientInit(); //ligne à changer pour tester la stratégie voulue
-	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
-	
-	
-	//***************************//
-	//		Boucle de jeu        //
-	//***************************//
-	
-	initscr();  // Initialisation de la bibliothèque ncurses.
-	//keypad(stdscr, TRUE);  // On active le clavier.
-	//noecho();  // Le choix utilisateur ne sera pas affiché.
-	
-	//int a; // Variable int qui contient le choix utilisateur.
-	//dir d; // Variable dir qui contient la direction qui va correspondre à a.
-
-	add_tile(g);
-	add_tile(g);	// Premier affichage de la grille, avec une valeur à l'intérieur.
+/*
+int jouer(grid g, dir d){
+	play(g,d);			// On joue et on réaffiche la grille à chaque tour de boucle.
 	afficher(g);
-	
-	while(1) { // Boucle de jeu.
-		
-		play(g, (s->play_move)(s,g));			// On joue et on réaffiche la grille à chaque tour de boucle.
-		afficher(g);
-	 
-		if(game_over(g)) {    // On vérifie si on a perdu.
+				
+	if(game_over(g)) {    // On vérifie si on a perdu.
 					
 		do {
 			clear();		// On fait un do while afin de pouvoir revenir à ce stade si le joueur appuie sur une touche non valide.
@@ -82,22 +60,94 @@ int main (void) {
 						
 			if(a=='q') { 	// Si l'utilisateur appuie sur q,
 							   
-				endwin(); // arrêt de la fenêtre ncurses.
-				s-> free_strategy(s);
-				delete_grid(g);
-				return EXIT_SUCCESS; // Fin du programme.
+					endwin(); // arrêt de la fenêtre ncurses.
+					return 0; // Fin du programme.
 			}
 						
 			else if (a=='r') {	// Si l'utilisateur appuie sur r,
-						
-				delete_grid(g);
-				grid g = new_grid();	// on supprime la grille et on en crée une nouvelle ce qui fera de nouveau renvoyer false à game_over.
-				add_tile(g);		// On prépare de nouveau le terrain avant de retourner dans la boucle de jeu.
-				afficher(g);
+							
+					delete_grid(g);
+					grid g = new_grid();	// on supprime la grille et on en crée une nouvelle ce qui fera de nouveau renvoyer false à game_over.
+					add_tile(g);		// On prépare de nouveau le terrain avant de retourner dans la boucle de jeu.
+					afficher(g);
 			}
 		}	
 		while(game_over(g));	// Si game_over n'est plus vrai on retourne dans la boucle de jeu.
-		} 
-	}	
-}	
+	}
+	return 1;
+}
+	*/
+	
+
+int main (void) {
+
+	grid g = new_grid (); // Création d'une nouvelle grille.
+	strategy s = A1_almyre_chambres_mahazoasy_petureau_efficient();
+	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
+	
+	//***************************//
+	//		Boucle de jeu        //
+	//***************************//
+	
+	//initscr();  // Initialisation de la bibliothèque ncurses.
+	//keypad(stdscr, TRUE);  // On active le clavier.
+	//noecho();  // Le choix utilisateur ne sera pas affiché.
+	
+	//int a; // Variable int qui contient le choix utilisateur.
+	//dir d; // Variable dir qui contient la direction qui va correspondre à a.
+
+	add_tile(g);
+	add_tile(g);	// Premier affichage de la grille, avec une valeur à l'intérieur.
+	afficher(g);
+	
+	while(!game_over(g)) { // Boucle de jeu.
+		play(g,s->play_move(s,g));
+		afficher(g);
+	}
+	
+	return EXIT_SUCCESS;
+}
+	
+	/*	
+	  //a = getch(); // Récupère dans a le code de la touche appuyée.
+	  if (a=='t'){
+		  while(1){
+			int numberRand = rand()%3;
+			switch (numberRand){  // switch qui fait correspondre l'int à la direction.
+						case 0:	
+						d=RIGHT;
+					break;
+					case 1:
+						d=LEFT;
+					break;
+					case 2:
+						d=UP;
+					break;
+					case 3:
+						d=DOWN;
+					break;
+			}
+			if (jouer(g,d) == 0)
+				return EXIT_SUCCESS;
+		}
+	 }
+		else
+			switch (a){  // switch qui fait correspondre l'int à la direction.
+					case KEY_RIGHT:	
+						d=RIGHT;
+					break;
+					case KEY_LEFT:
+						d=LEFT;
+					break;
+					case KEY_UP:
+						d=UP;
+					break;
+					case KEY_DOWN:
+						d=DOWN;
+					break;
+				}
+				if (jouer(g,d) == 0)
+					return EXIT_SUCCESS;
+			}*/
+		
 				

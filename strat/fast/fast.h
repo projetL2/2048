@@ -1,3 +1,5 @@
+//Le fichier fast.h est l'interface de la stratégie rapide
+
 #ifndef FAST_H
 #define FAST_H
 
