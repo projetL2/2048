@@ -126,7 +126,7 @@ dir stratEfficient(strategy s, grid g) {
 }
 	
 	
-strategy efficientInit() {
+strategy A1_almyre_chambres_mahazoasy_petureau_efficient() {
 	
 	strategy s = malloc(sizeof(struct strategy_s));
 	assert(s!=NULL);

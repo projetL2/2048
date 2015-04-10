@@ -9,6 +9,9 @@
 #gcc -std=c99 -fPIC -c fast.c -o fast.o
 #gcc -shared -Wl,-soname,libA1_almyre_chambres_mahazoasy_petureau_fast.so.1 -o libA1_almyre_chambres_mahazoasy_petureau_fast.so *.o
 
+#gcc -std=c99 -fPIC -c efficient.c -o efficient.o
+#gcc -shared -Wl,-soname,libA1_almyre_chambres_mahazoasy_petureau_efficient.so.1 -o libA1_almyre_chambres_mahazoasy_petureau_efficient.so *.o
+
 # Makefile
 
 # Le compilateur:

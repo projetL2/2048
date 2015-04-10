@@ -5,6 +5,6 @@
 
 dir stratEfficient(strategy s, grid g);
 
-strategy efficientInit();
+strategy A1_almyre_chambres_mahazoasy_petureau_efficient();
 
 #endif
