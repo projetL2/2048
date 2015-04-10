@@ -7,7 +7,7 @@
 #include <time.h>
 #include <string.h>
 #include "strategy.h"
-#include "fast.h"
+#include "efficient.h"
 
 void afficher (grid g) {
 
@@ -47,7 +47,7 @@ void afficher (grid g) {
 int main (void) {
 
 	grid g = new_grid (); // Création d'une nouvelle grille.
-	strategy s = fastInit(); // strategy s = efficientInit(); //ligne à changer pour tester la stratégie voulue
+	strategy s = efficientInit(); // strategy s = efficientInit(); //ligne à changer pour tester la stratégie voulue
 	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
 	
 	
