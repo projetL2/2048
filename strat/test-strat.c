@@ -7,7 +7,7 @@
 #include <time.h>
 #include <string.h>
 #include "strategy.h"
-#include "efficient.h"
+#include "fast2.h"
 
 
 void afficher (grid g) {
@@ -82,7 +82,7 @@ int jouer(grid g, dir d){
 int main (void) {
 
 	grid g = new_grid (); // Création d'une nouvelle grille.
-	strategy s = A1_almyre_chambres_mahazoasy_petureau_efficient();
+	strategy s = A1_almyre_chambres_mahazoasy_petureau_fast2();
 	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
 	
 	//***************************//

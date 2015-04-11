@@ -1,0 +1,18 @@
+ATTENTION Ce fichier n'est pas un makefile mais plutot un READ-ME à utiliser que pour savoir comment compiler
+
+soit on veut "tester" une strategie:
+gcc -std=c99 grid.c strategy.c test-strat.c fast.c -o test-strat
+
+soit on veut tester avec l'excutable fourni:
+telecharger tournament file:///net/stockage/pp1/strategies/
+chmod +x tournament
+
+gcc -std=c99 -fPIC -c grid.c -o grid.o
+gcc -std=c99 -fPIC -c strategy.c -o strategy.o
+
+puis on choisi la ligne qui correspond
+gcc -std=c99 -fPIC -c fast.c -o fast.o
+gcc -shared -Wl,-soname,libA1_almyre_chambres_mahazoasy_petureau_fast.so.1 -o libA1_almyre_chambres_mahazoasy_petureau_fast.so *.o
+
+gcc -std=c99 -fPIC -c efficient.c -o efficient.o
+gcc -shared -Wl,-soname,libA1_almyre_chambres_mahazoasy_petureau_efficient.so.1 -o libA1_almyre_chambres_mahazoasy_petureau_efficient.so *.o

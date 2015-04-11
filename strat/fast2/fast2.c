@@ -42,26 +42,26 @@ dir stratFast(strategy s, grid g) {
 	int valColonne=abs(colonne1-colonne2);
 	
 	dir d=RIGHT;// on initialise à une valeur pour commencer.
-	if (valColonne>valLigne){	// si la plus grande différence est sur la largeur de la grille
+	if (valColonne<valLigne){	// si la plus petite différence est sur la largeur de la grille, on essaye les mouvement droite/gauche pour rapprocher les grosses valeurs
 		if (can_move(g,d))
 			return d;
 		d=LEFT;
 		if (can_move(g,d))	// on essaye l'autre direction "logique"
 			return d;
-		d=DOWN;			//pour ne pas rester bloquer
+		d=DOWN;			//pour ne pas rester bloquer on teste les autres directions.
 		if (can_move(g,d))
 			return d;	
 		d=UP;
 		return d;
 		}
-	else	// si la plus grande différence est sur la hauteur de la grille
+	else	// si la plus petite différence est sur la hauteur de la grille, on essaye les mouvement haut/bas pour rapprocher les grosses tuiles
 		d=DOWN;
 		if (can_move(g,d))
 			return d;	
 		d=UP;	// on essaye l'autre direction "logique"
 		if (can_move(g,d))
 			return d;
-		d=RIGHT;	// on ne veut pas etre bloquer
+		d=RIGHT;	// pour ne pas rester bloquer, on teste les autres directions
 		if (can_move(g,d))
 			return d;
 		d=LEFT;
