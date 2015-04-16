@@ -65,6 +65,7 @@ void dessinerGrille(SDL_Surface* surface, grid g) {
 
 int main() {
 	
+	srand(time (NULL));
 	grid g = new_grid();
 	add_tile(g);
 	add_tile(g);
