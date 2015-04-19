@@ -60,7 +60,21 @@ void dessinerGrille(SDL_Surface* surface, grid g) {
 			}
         }
     }
+    
+    if(game_over(g)) {
+		TTF_Font *gameOverfont = TTF_OpenFont("fonts/LinLibertine.ttf", 80);
+		char gameOver[10] = "";
+		sprintf(gameOver, "Game Over");
+		SDL_Surface* gameOverSurface = TTF_RenderText_Solid(gameOverfont, gameOver, textColor);
+		SDL_Rect gameOverRect = { SCREEN_WIDTH/2-185, GRID_SIDE/2*140,50,50 };
+		SDL_BlitSurface(gameOverSurface, NULL, surface, &gameOverRect);
+		TTF_CloseFont(gameOverfont);
+	}
+    
 	SDL_BlitSurface(textSurface, NULL, surface, &scoreRect);
+	SDL_FreeSurface(texte);
+	SDL_FreeSurface(textSurface);
+	TTF_CloseFont(font);
 }
 
 int main() {
@@ -129,13 +143,15 @@ int main() {
                 }
 				break;
 			}	
-		}	
+		}
+			
 		SDL_FreeSurface(surface);	
 		dessinerGrille(surface, g);
 		SDL_UpdateWindowSurface( fenetre );
 		
 	}
 	
+	TTF_CloseFont(font);
     SDL_FreeSurface(surface);  
     SDL_DestroyWindow(fenetre);  
     SDL_Quit(); //arret de la SDL
