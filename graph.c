@@ -17,6 +17,7 @@ bool init() {
 	return true;
 }
 
+//affiche le "fond", la structure générale de la grille en fonction de GRID_SIDE
 void nouveauJeu(SDL_Surface* surface) {
 	// création d'une surface
 	SDL_Surface* tile = NULL;
@@ -33,6 +34,7 @@ void nouveauJeu(SDL_Surface* surface) {
 		}
 }
 
+//permet de dessiner la grille, afficher le score et le contenu des tuiles
 void dessinerGrille(SDL_Surface* surface, grid g) {
 	
 	char score[30] = "";
@@ -44,11 +46,12 @@ void dessinerGrille(SDL_Surface* surface, grid g) {
 	SDL_Rect scoreRect = { SCREEN_WIDTH/2-100, SCREEN_HEIGHT-45,50,50};
 	nouveauJeu(surface);
 	
-	SDL_Rect pos;
+	SDL_Rect pos; //SDL_Rect temporaire utilisé pour afficher les chiffres des différentes tuiles
 	pos.x = 0;
 	pos.y = 0;
 	char tile[10] = "";
 	
+	//affichage du contenu des tuiles
 	for (int ligne=0; ligne<GRID_SIDE; ++ligne) {
 		for (int colonne=0; colonne<GRID_SIDE; ++colonne) {
             if (get_tile(g, colonne, ligne) != 0) {
@@ -60,7 +63,7 @@ void dessinerGrille(SDL_Surface* surface, grid g) {
 			}
         }
     }
-    
+    //affichage du game over
     if(game_over(g)) {
 		TTF_Font *gameOverfont = TTF_OpenFont("fonts/LinLibertine.ttf", 80);
 		char gameOver[10] = "";
@@ -70,7 +73,7 @@ void dessinerGrille(SDL_Surface* surface, grid g) {
 		SDL_BlitSurface(gameOverSurface, NULL, surface, &gameOverRect);
 		TTF_CloseFont(gameOverfont);
 	}
-    
+    //libération des structures SDL
 	SDL_BlitSurface(textSurface, NULL, surface, &scoreRect);
 	SDL_FreeSurface(texte);
 	SDL_FreeSurface(textSurface);
@@ -113,11 +116,13 @@ int main() {
 		fprintf(stderr,"Erreur de création de la fenêtre: %s\n",SDL_GetError());	
 		
 	nouveauJeu(surface);
-		
+	
+	// Boucle de jeu	
 	while(!quit) {
 		
 		SDL_Event e;
 		
+		//boucle d'évenements
 		while(SDL_PollEvent(&e)) {
 			
 			switch(e.type) {
@@ -144,7 +149,7 @@ int main() {
 				break;
 			}	
 		}
-			
+		// libération des structures SDL et mise à jour de la fenêtre	
 		SDL_FreeSurface(surface);	
 		dessinerGrille(surface, g);
 		SDL_UpdateWindowSurface( fenetre );
