@@ -54,7 +54,7 @@ return g->grid[colonne][ligne]; // Si la tile est dans les limites de la grille,
 void set_tile (grid g, int colonne, int ligne, tile t) {
 g->grid[colonne][ligne] = t;
 }
-// Fonction booléenne qui renvoie true si le joueur si le joueur peut effectuer le mouvement dans la direction passée en paramètre et false dans le cas inverse.
+// Fonction booléenne qui renvoie true si le joueur peut effectuer un mouvement dans une direction et false sinon.
 bool can_move (grid g, dir d) {
 // On regarde la direction demandée (d).
 // Suivant celle-ci, on parcourt la grille pour voir si on peut, quelque part, faire un déplacement ou une fusion,

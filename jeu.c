@@ -48,9 +48,9 @@ int main (void) {
 	srand(time (NULL)); // srand est une fonction de la bibliothéque stdlib.h. Cette ligne permet d'initiliser la fonction time (de la bibliothèque time.h).
 	
 	
-	//***************************//
+	//***********************************//
 	//		Boucle de jeu        //
-	//***************************//
+	//**********************************//
 	
 	initscr();  // Initialisation de la bibliothèque ncurses.
 	keypad(stdscr, TRUE);  // On active le clavier.
